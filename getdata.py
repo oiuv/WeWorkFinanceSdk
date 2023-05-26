@@ -10,6 +10,7 @@ except FileNotFoundError:
 
 # 定义拉取数据的参数
 limit = 1000  # 每次拉取数据的条数
+seq = seq // limit * limit
 
 # 循环拉取数据
 while True:
