@@ -90,7 +90,7 @@ g++ tool_testSdk.cpp -ldl -o sdktools
 ```
 ./sdktools 1(chatmsg) 2(mediadata) 3(decryptdata)
 ./sdktools 1 seq limit proxy passwd timeout
-./sdktools 2 fileid proxy passwd timeout savefile
+./sdktools 2 fileid savefile proxy passwd timeout
 ./sdktools 3 encrypt_key encrypt_chat_msg
 ```
 
@@ -103,7 +103,7 @@ g++ tool_testSdk.cpp -ldl -o sdktools
 
 ### getdata.py
 
-自动从头拉取聊天记录
+自动从头拉取聊天记录并保存至`chat.jsonl`
 
     python getdata.py
 
@@ -112,3 +112,9 @@ g++ tool_testSdk.cpp -ldl -o sdktools
 把拉取的聊天记录转为excel格式
 
     python data2excel.py chat.jsonl
+
+### chatdata.py
+
+解密`chatdata.xlsx`聊天记录并转存为`chatdata.jsonl`
+
+    python chatdata.py

@@ -1,6 +1,4 @@
 import pandas as pd
-from decrypt import decrypt_data
-
 
 def merge_excel_files(excel_files):
     # 创建一个空的DataFrame
@@ -15,9 +13,6 @@ def merge_excel_files(excel_files):
 
     # 去重
     df.drop_duplicates(inplace=True)
-
-    # 解密随机密钥
-    df['decrypt_random_key'] = df['encrypt_random_key'].apply(decrypt_data)
 
     # 保存到新的Excel文件中
     df.to_excel('chatdata.xlsx', index=False)
