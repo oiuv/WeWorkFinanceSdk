@@ -115,6 +115,10 @@ g++ tool_testSdk.cpp -ldl -o sdktools
 
 ### chatdata.py
 
-解密`chatdata.xlsx`聊天记录并转存为`chatdata.jsonl`
+解密聊天记录并转存为`chatdata.jsonl`
 
-    python chatdata.py
+    python chatdata.py chat.xlsx
+
+### chatmsg.py
+
+封装为从获取记录到解密存档全自动脚本。
