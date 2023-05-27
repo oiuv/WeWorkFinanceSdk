@@ -1,41 +1,48 @@
 import os
 import json
 
-# 从文件读取起始 seq
-try:
-    with open('seq.txt', 'r') as f:
-        seq = int(f.read().strip())
-except FileNotFoundError:
-    seq = 0
+class GetData:
+    def __init__(self, seq_file='seq.txt', data_file='chat.jsonl', limit=1000):
+        self.seq_file = seq_file
+        self.data_file = data_file
+        self.limit = limit
 
-# 定义拉取数据的参数
-limit = 1000  # 每次拉取数据的条数
-seq = seq // limit * limit
+    def get_seq(self):
+        try:
+            with open(self.seq_file, 'r') as f:
+                seq = int(f.read().strip())
+        except FileNotFoundError:
+            seq = 0
+        return seq
 
-# 循环拉取数据
-while True:
-    # 执行拉取数据的命令
-    cmd = f"./sdktools 1 {seq} {limit}"
-    os.system(cmd)
+    def update_seq(self, seq):
+        with open(self.seq_file, 'w') as f:
+            f.write(str(seq))
 
-    # 读取本地文件中的数据
-    with open('chat.jsonl', 'r') as f:
-        lines = f.readlines()
+    def get_last_data(self):
+        with open(self.data_file, 'r') as f:
+            lines = f.readlines()
+        last_line = lines[-1].strip()
+        last_data = json.loads(last_line)['chatdata']
+        return last_data
 
-    # 解析最后一行数据
-    last_line = lines[-1].strip()  # 读取最后一行数据
-    last_data = json.loads(last_line)['chatdata']  # 解析最后一行数据中的 chatdata 字段
+    def run(self):
+        seq = self.get_seq() // self.limit * self.limit
+        while True:
+            cmd = f"./sdktools 1 {seq} {self.limit}"
+            os.system(cmd)
+            last_data = self.get_last_data()
+            # 如果数据为空（无权访问）
+            if not last_data:
+                print("Get chatdata whiteip not match ❌")
+                break
+            seq = last_data[-1]['seq']
+            print(f"当前拉取进度：第 {seq} 条数据 ✔")
+            if len(last_data) < self.limit:
+                break
+        self.update_seq(seq)
 
-    # 更新 seq 参数，准备拉取下一批数据
-    seq = last_data[-1]['seq']  # 获取最后一条数据的 seq，作为下一次拉取数据的起始 seq
-
-    # 输出拉取进度，显示已拉取多少 seq
-    print(f"当前拉取进度：第 {seq} 条数据 ✔")
-
-    # 如果拉取到的数据不足 1000 条，则退出循环
-    if len(last_data) < limit:
-        break
-
-# 存储最终的 seq 值到文件中
-with open('seq.txt', 'w') as f:
-    f.write(str(seq))
+# 使用示例
+if __name__ == '__main__':
+    get_data = GetData()
+    get_data.run()

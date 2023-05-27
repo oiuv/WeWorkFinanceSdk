@@ -104,32 +104,32 @@ class WxChat:
         end_time = time.time()
         print(f"数据预处理耗时 {end_time - start_time:.2f} 秒")
 
-    def chat_data(self, file_name):
-        # 读取Excel文件
-        print(f"开始加载文件{file_name}……💕")
-        df = pd.read_excel(file_name, engine='openpyxl')
+def chat_data(file_name, sdktools_path='./sdktools'):
+    # 读取Excel文件
+    print(f"开始加载文件{file_name}……💕")
+    df = pd.read_excel(file_name, engine='openpyxl')
 
-        # 获取decrypt_random_key和encrypt_chat_msg列的数据
-        decrypt_random_key = df['decrypt_random_key'].tolist()
-        encrypt_chat_msg = df['encrypt_chat_msg'].tolist()
+    # 获取decrypt_random_key和encrypt_chat_msg列的数据
+    decrypt_random_key = df['decrypt_random_key'].tolist()
+    encrypt_chat_msg = df['encrypt_chat_msg'].tolist()
 
-        # 构造指令
-        cmd = [self.sdktools_path, '3']
+    # 构造指令
+    cmd = [sdktools_path, '3']
 
-        # 使用多进程加速数据处理过程
-        print("开始解密聊天记录……💕")
-        with Pool() as p:
-            func = partial(process_data, cmd, decrypt_random_key, encrypt_chat_msg)
-            for _ in tqdm(p.imap_unordered(func, range(len(decrypt_random_key))),
-                          total=len(decrypt_random_key), desc='Processing'):
-                pass
+    # 使用多进程加速数据处理过程
+    print("开始解密聊天记录……💕")
+    with Pool() as p:
+        func = partial(process_data, cmd, decrypt_random_key, encrypt_chat_msg)
+        for _ in tqdm(p.imap_unordered(func, range(len(decrypt_random_key))),
+                        total=len(decrypt_random_key), desc='Processing'):
+            pass
 
-        # 打印结果
-        print('数据解密完成 ✔')
+    # 打印结果
+    print('数据解密完成 ✔')
 
 
 if __name__ == '__main__':
     wx_chat = WxChat()
-    wx_chat.get_data()
-    wx_chat.data_to_excel('chat.jsonl')
-    wx_chat.chat_data('chat.xlsx')
+    # wx_chat.get_data()
+    # wx_chat.data_to_excel('chat.jsonl')
+    chat_data('chat.xlsx')

@@ -5,46 +5,50 @@ import time
 from tqdm import tqdm
 from decrypt import decrypt_data
 
-# 解析命令行参数
-parser = argparse.ArgumentParser(description='读取JSONL格式的原始会话记录并处理后转存为Excel文件')
-parser.add_argument('file_name', help='JSONL格式会话记录文件，如：chat.jsonl')
-args = parser.parse_args()
+class Data2Excel:
+    def __init__(self, file_name):
+        self.file_name = file_name
 
-# 统计代码运行时间
-start_time = time.time()
+    def load_data(self):
+        df = pd.DataFrame()
+        with open(self.file_name, 'r') as f:
+            for line in f:
+                data = json.loads(line)
+                df = pd.concat([df, pd.DataFrame.from_records(data['chatdata'])])
+        return df
 
-# 创建一个空的 DataFrame
-df = pd.DataFrame()
+    def drop_duplicates(self, df):
+        df.drop_duplicates(subset=['seq'], inplace=True)
+        return df
 
-# 打开 JSONL 文件，并逐行读取数据
-print(f"开始加载文件{args.file_name}……💕")
-with open(args.file_name, 'r') as f:
-    for line in f:
-        # 将 JSON 字符串转换为 Python 对象
-        data = json.loads(line)
-        # 将 chatdata 字段中的数据添加到 DataFrame 中
-        df = pd.concat([df, pd.DataFrame.from_records(data['chatdata'])])
+    def decrypt_random_key(self, df):
+        tqdm.pandas(desc="Decrypting random key")
+        df['decrypt_random_key'] = df['encrypt_random_key'].progress_apply(decrypt_data)
+        return df
 
-# 输出 DataFrame
-print(df)
+    def save_to_excel(self, df):
+        file_prefix = self.file_name.split('.')[0]
+        df.to_excel(f"{file_prefix}.xlsx", index=False)
 
-# 去重
-print("开始数据去重处理……💕")
-df.drop_duplicates(subset=['seq'], inplace=True)
+    def run(self):
+        start_time = time.time()
+        print(f"开始加载文件{self.file_name}……💕")
+        df = self.load_data()
+        print(df)
+        print("开始数据去重处理……💕")
+        df = self.drop_duplicates(df)
+        print("开始解密随机密钥……💕")
+        df = self.decrypt_random_key(df)
+        print("数据存档中……💕")
+        self.save_to_excel(df)
+        print(df)
+        end_time = time.time()
+        print(f"数据预处理耗时 {end_time - start_time:.2f} 秒")
 
-# 解密随机密钥
-print("开始解密随机密钥……💕")
-tqdm.pandas(desc="Decrypting random key")
-df['decrypt_random_key'] = df['encrypt_random_key'].progress_apply(decrypt_data)
-
-# 将 DataFrame 写入 Excel 文件
-print("数据存档中……💕")
-file_prefix = args.file_name.split('.')[0]
-df.to_excel(f"{file_prefix}.xlsx", index=False)
-
-# 输出 DataFrame
-print(df)
-
-# 输出代码运行时间
-end_time = time.time()
-print(f"代码运行时间为 {end_time - start_time:.2f} 秒")
+# 使用示例
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='读取JSONL格式的原始会话记录并处理后转存为Excel文件')
+    parser.add_argument('file_name', help='JSONL格式会话记录文件，如：chat.jsonl')
+    args = parser.parse_args()
+    data2excel = Data2Excel(args.file_name)
+    data2excel.run()
