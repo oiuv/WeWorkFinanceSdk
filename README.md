@@ -121,4 +121,10 @@ g++ tool_testSdk.cpp -ldl -o sdktools
 
 ### chatmsg.py
 
-封装为从获取记录到解密存档全自动脚本。
+把解密的聊天记录格式化处理为`chatmsg.xlsx`
+
+    python chatmsg.py chatdata.jsonl
+
+### WxChat.py
+
+封装的类，提供从数据获取到解密格式化的所有功能。
