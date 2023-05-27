@@ -2,10 +2,17 @@ import json
 import os
 import subprocess
 import time
+from functools import partial
 from multiprocessing import Pool
 import pandas as pd
 from tqdm import tqdm
 from decrypt import decrypt_data
+
+
+def process_data(cmd, decrypt_random_key, encrypt_chat_msg, i):
+    # 将decrypt_random_key和encrypt_chat_msg列中的数据依次传递给指令
+    subprocess.run(cmd + [decrypt_random_key[i], encrypt_chat_msg[i]],
+                   stdout=subprocess.PIPE)
 
 
 class WxChat:
@@ -83,8 +90,7 @@ class WxChat:
         # 解密随机密钥
         print("开始解密随机密钥……💕")
         tqdm.pandas(desc="Decrypting random key")
-        df['decrypt_random_key'] = df['encrypt_random_key'].progress_apply(
-            decrypt_data)
+        df['decrypt_random_key'] = df['encrypt_random_key'].progress_apply(decrypt_data)
 
         # 将 DataFrame 写入 Excel 文件
         print("数据存档中……💕")
@@ -110,15 +116,11 @@ class WxChat:
         # 构造指令
         cmd = [self.sdktools_path, '3']
 
-        def process_data(i):
-            # 将decrypt_random_key和encrypt_chat_msg列中的数据依次传递给指令
-            subprocess.run(cmd + [decrypt_random_key[i], encrypt_chat_msg[i]],
-                           stdout=subprocess.PIPE)
-
         # 使用多进程加速数据处理过程
         print("开始解密聊天记录……💕")
         with Pool() as p:
-            for _ in tqdm(p.imap_unordered(process_data, range(len(decrypt_random_key))),
+            func = partial(process_data, cmd, decrypt_random_key, encrypt_chat_msg)
+            for _ in tqdm(p.imap_unordered(func, range(len(decrypt_random_key))),
                           total=len(decrypt_random_key), desc='Processing'):
                 pass
 
