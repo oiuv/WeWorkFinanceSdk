@@ -16,6 +16,8 @@ def process_chat_data(file_name, encoding='utf-8'):
         data_call = []
 
         for line in f:
+            # 输出行（诊断错误位置）
+            # print(line)
             try:
                 # 将 JSON 字符串转换为 Python 对象
                 data = json.loads(line)
@@ -89,6 +91,7 @@ def process_chat_data(file_name, encoding='utf-8'):
                     }
                     data_call.append(selected_data)
 
+    print("数据处理中……💕")
     # 创建空的 DataFrame
     df = pd.DataFrame()
 
@@ -117,15 +120,18 @@ def process_chat_data(file_name, encoding='utf-8'):
         # 将 DataFrame 写入 Excel 文件
         write_to_excel(df, f"chat_{type}.xlsx", type)
 
-        # 打印结果
-        print(f'chat_{type}.xlsx 已保存 ✔')
-
 
 def write_to_excel(df, file_name, sheet_name):
     # 将 DataFrame 写入 Excel 文件
     with pd.ExcelWriter(file_name) as writer:
         df.to_excel(writer, sheet_name=sheet_name, index=False)
+        # 打印结果
+        print(f'{file_name} 已保存 ✔')
 
 
 if __name__ == '__main__':
-    process_chat_data('chatdata.jsonl')
+    import sys
+    if len(sys.argv) > 1:
+        process_chat_data(sys.argv[1])
+    else:
+        process_chat_data('chatdata.jsonl')
