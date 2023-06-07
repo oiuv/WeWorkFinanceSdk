@@ -15,9 +15,9 @@ def process_chat_data(file_name, encoding='utf-8'):
         data_file = []
         data_call = []
 
-        for line in f:
-            # 输出行（诊断错误位置）
-            # print(line)
+        for i, line in enumerate(f):
+            # 输出行号和行内容（诊断错误）
+            print(f"Line {i+1}: {line}")
             try:
                 # 将 JSON 字符串转换为 Python 对象
                 data = json.loads(line)

@@ -129,4 +129,4 @@ if __name__ == '__main__':
     wx_chat = WxChat()
     wx_chat.get_data()
     wx_chat.data_to_excel('chat.jsonl')
-    # wx_chat.chat_data('chat.xlsx')
+    wx_chat.chat_data('chat.xlsx')

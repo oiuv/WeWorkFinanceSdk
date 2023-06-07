@@ -5,7 +5,9 @@ import time
 from tqdm import tqdm
 from decrypt import decrypt_data
 
+
 class Data2Excel:
+
     def __init__(self, file_name):
         self.file_name = file_name
 
@@ -44,6 +46,7 @@ class Data2Excel:
         print(df)
         end_time = time.time()
         print(f"数据预处理耗时 {end_time - start_time:.2f} 秒")
+
 
 # 使用示例
 if __name__ == '__main__':

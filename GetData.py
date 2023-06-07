@@ -1,7 +1,9 @@
 import os
 import json
 
+
 class GetData:
+
     def __init__(self, seq_file='seq.txt', data_file='chat.jsonl', limit=1000):
         self.seq_file = seq_file
         self.data_file = data_file
@@ -41,6 +43,7 @@ class GetData:
             if len(last_data) < self.limit:
                 break
         self.update_seq(seq)
+
 
 # 使用示例
 if __name__ == '__main__':

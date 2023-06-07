@@ -1,11 +1,22 @@
+import os
 import pandas as pd
 
-def merge_excel_files(excel_files):
+
+def merge_excel_files():
+    # 获取当前目录下所有以merge开头的xlsx文件
+    file_list = [
+        f for f in os.listdir()
+        if f.startswith('merge') and f.endswith('.xlsx')
+    ]
+    if not file_list:
+        print('No files to merge.')
+        return
+
     # 创建一个空的DataFrame
     df = pd.DataFrame()
 
     # 循环读取每个Excel文件并合并到df中
-    for file in excel_files:
+    for file in file_list:
         # 读取Excel文件
         temp_df = pd.read_excel(file, engine='openpyxl')
         # 合并到df中
@@ -15,9 +26,9 @@ def merge_excel_files(excel_files):
     df.drop_duplicates(inplace=True)
 
     # 保存到新的Excel文件中
-    df.to_excel('chatdata.xlsx', index=False)
+    df.to_excel('Merged.xlsx', index=False)
+    print('Files merged successfully.')
 
 
 if __name__ == '__main__':
-    # 定义要合并的Excel文件名列表
-    merge_excel_files(['chat.xlsx'])
+    merge_excel_files()
