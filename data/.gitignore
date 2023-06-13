@@ -1,2 +1,7 @@
 *
 !.gitignore
+!call
+!file
+!image
+!video
+!voice
