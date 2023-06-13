@@ -19,11 +19,16 @@ def get_file(msgtype, ext, file=0):
 # 调用函数，传入文件类型和扩展名
 # 图片
 get_file('image', 'jpg')
+print('图片消息存档完成 🧡')
 # 语音
 get_file('voice', 'amr')
+print('语音消息存档完成 💛')
 # 视频
 get_file('video', 'mp4')
+print('视频消息存档完成 💚')
 # 文件
-get_file('file', file=1)
+get_file('file', '', file=1)
+print('文件消息存档完成 💙')
 # 通话
 get_file('call', 'mp3')
+print('通话消息存档完成 💜')
