@@ -101,30 +101,36 @@ g++ tool_testSdk.cpp -ldl -o sdktools
     python3 -m pip install pycryptodome
 
 
-### getdata.py
+### GetData
 
 自动从头拉取聊天记录并保存至`chat.jsonl`
 
-    python getdata.py
+    python GetData.py
 
-### data2excel.py
+### Data2Excel
 
 把拉取的聊天记录转为excel格式
 
-    python data2excel.py chat.jsonl
+    python Data2Excel.py chat.jsonl
 
-### chatdata.py
+### chatData
 
 解密聊天记录并转存为`chatdata.jsonl`
 
-    python chatdata.py chat.xlsx
-
-### chatmsg.py
-
-把解密的聊天记录格式化处理为`chatmsg.xlsx`
-
-    python chatmsg.py chatdata.jsonl
+    python chatData.py chat.xlsx
 
 ### WxChat.py
 
-封装的类，提供从数据获取到解密格式化的所有功能。
+封装的类，提供从数据获取到解密格式化的所有功能，直接把chat.jsonl转为chatdata.jsonl。
+
+### chatMsg
+
+把解密的聊天记录格式化处理为`chat_<msgtype>.xlsx`
+
+    python chatMsg.py chatdata.jsonl
+
+### getFile
+
+根据转换后的聊天记录获取图片、语音、文件等内容。
+
+    python getFile.py
