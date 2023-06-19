@@ -1,5 +1,6 @@
 import pandas as pd
 import subprocess
+import time
 
 
 def get_file(msgtype, ext, file=0):
@@ -16,6 +17,8 @@ def get_file(msgtype, ext, file=0):
         subprocess.run(['./sdktools', '2', fileid, path])
 
 
+# 统计代码运行时间
+start_time = time.time()
 # 调用函数，传入文件类型和扩展名
 # 图片
 get_file('image', 'jpg')
@@ -32,3 +35,6 @@ print('文件消息存档完成 💙')
 # 通话
 get_file('call', 'mp3')
 print('通话消息存档完成 💜')
+# 输出代码运行时间
+end_time = time.time()
+print(f"获取资源耗时 {end_time - start_time:.2f} 秒")

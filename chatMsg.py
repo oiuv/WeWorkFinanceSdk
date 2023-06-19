@@ -31,7 +31,7 @@ def process_chat_data(file_name, encoding='utf-8'):
                 selected_data = {
                     'msgid': data['msgid'],
                     'from': data['from'],
-                    'tolist': '|'.join(data['tolist']),
+                    'tolist': '|'.join(data.get('tolist', [])),
                     'msgtime': data['msgtime'],
                     'msgtype': data['msgtype']
                 }
