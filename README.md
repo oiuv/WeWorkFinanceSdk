@@ -134,3 +134,7 @@ g++ tool_testSdk.cpp -ldl -o sdktools
 根据转换后的聊天记录获取图片、语音、文件等内容。
 
     python getFile.py
+
+---
+
+推荐直接`./run.sh`一键处理数据~
