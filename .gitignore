@@ -2,6 +2,7 @@ __pycache__
 *.pem
 *.jsonl
 *.xlsx
+.env
 sdktools
 seq.txt
 test.py

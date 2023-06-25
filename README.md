@@ -21,18 +21,23 @@ openssl genrsa -out private.pem 2048
 openssl rsa -in private.pem -pubout -out public.pem
 ```
 
-## tool_testSdk.cpp
+## sdktools
 
 ### 配置
 
-修改以下部分为自己的企业配置：
+推荐直接复制`sdktools.cpp`到C_sdk中，并修改以下部分为自己的企业配置：
+
 ```c
     ret = init_fn(sdk, "wwd08c8e7c775ab44d", "zJ6k0naVVQ--gt9PUSSEvs03zW_nlDVmjLCTOTAfrew");
 ```
 
-### 优化
+然后复制`libWeWorkFinanceSdk_C.so`到`/usr/local/lib/`并编译sdktools：
 
-修改以下部分内容从显示为保存到jsonl文件：
+```
+g++ sdktools.cpp -ldl -o sdktools
+```
+
+`sdktools.cpp` 相对 `tool_testSdk.cpp`修改了以下部分内容从显示为保存到jsonl文件：
 
 1. 修改
 ```c
@@ -68,13 +73,9 @@ openssl rsa -in private.pem -pubout -out public.pem
         }
 ```
 
-### 编译
-
-```
-g++ tool_testSdk.cpp -ldl -o sdktools
-```
-
 ### 用法
+
+sdktools指令用法如下：
 
 ```c
 //seq 表示该企业存档消息序号，该序号单调递增，拉取序号建议设置为上次拉取返回结果中最大序号。首次拉取时seq传0，sdk会返回有效期内最早的消息。
@@ -96,10 +97,13 @@ g++ tool_testSdk.cpp -ldl -o sdktools
 
 > 注：获取会话记录内容不能超过5天，如果企业需要全量数据，则企业需要定期拉取聊天消息。返回的ChatDatas内容为json格式。
 
-## python
+提示：**推荐直接`./run.sh`一键处理数据**，或者把此脚本加入计划任务中每日定期执行
+
+> 注意需在`.env`中配置数据库，具体请参考`.env.example`文件
+
+## python脚本说明
 
     python3 -m pip install pycryptodome
-
 
 ### GetData
 
@@ -135,6 +139,6 @@ g++ tool_testSdk.cpp -ldl -o sdktools
 
     python getFile.py
 
----
+----
 
-推荐直接`./run.sh`一键处理数据~
+提示：**推荐直接`./run.sh`一键处理数据**，或者把此脚本加入计划任务中每日定期执行。

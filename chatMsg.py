@@ -1,5 +1,8 @@
 import json
 import pandas as pd
+import pymysql
+from dotenv import dotenv_values
+from sqlalchemy import create_engine
 
 
 def process_chat_data(file_name, encoding='utf-8'):
@@ -104,6 +107,10 @@ def process_chat_data(file_name, encoding='utf-8'):
     # 将 DataFrame 写入 Excel 文件
     write_to_excel(df, "chat_list.xlsx", 'list')
 
+    # 将数据存入 MySQL 数据库
+    db_config = dotenv_values('.env')
+    save_to_mysql(df, 'chat_list', db_config)
+
     # 定义消息类型
     msg_types = ['text', 'image', 'voice', 'video', 'file', 'call']
 
@@ -119,6 +126,31 @@ def process_chat_data(file_name, encoding='utf-8'):
 
         # 将 DataFrame 写入 Excel 文件
         write_to_excel(df, f"chat_{type}.xlsx", type)
+
+        # 将数据存入 MySQL 数据库
+        save_to_mysql(df, f'chat_{type}', db_config)
+
+
+def save_to_mysql(df, table_name, db_config):
+    if db_config.get('SAVE_TO_DB') == 'True':
+        try:
+            # 创建 MySQL 数据库连接字符串
+            connection_string = f"mysql+pymysql://{db_config['DB_USER']}:{db_config['DB_PASSWORD']}@{db_config['DB_HOST']}:{db_config['DB_PORT']}/{db_config['DB_NAME']}"
+
+            # 创建数据库连接引擎
+            engine = create_engine(connection_string)
+
+            # 将 DataFrame 写入 MySQL 数据库的表中
+            df.to_sql(name=table_name, con=engine, if_exists='append', index=False)
+
+            # 关闭数据库连接
+            engine.dispose()
+
+            # 打印结果
+            print(f'{table_name} 数据已保存到 MySQL 数据库 ✔')
+
+        except pymysql.Error as e:
+            print(f"数据库连接错误：{e}")
 
 
 def write_to_excel(df, file_name, sheet_name):
