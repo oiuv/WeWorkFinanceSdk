@@ -18,7 +18,7 @@ class WxChat:
             self.seq = 0
 
         self.limit = 1000  # 每次拉取数据的条数
-        self.seq = self.seq // self.limit * self.limit
+        # self.seq = self.seq // self.limit * self.limit
         self.sdktools_path = sdktools_path
 
     def get_data(self):
