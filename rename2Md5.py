@@ -11,10 +11,14 @@ def calculate_md5(file_path):
 
 def rename_files_with_md5(directory):
     """将指定目录中的文件重命名为其MD5哈希值"""
+    total_processed = 0
+    renamed_files = 0
+    deleted_files = 0
     for root, dirs, files in os.walk(directory):
         for filename in files:
             file_path = os.path.join(root, filename)
             if os.path.isfile(file_path):
+                total_processed += 1
                 # 计算文件的MD5哈希值
                 md5_hash = calculate_md5(file_path)
                 # 获取文件扩展名
@@ -26,13 +30,19 @@ def rename_files_with_md5(directory):
                 # 如果新文件已存在，则删除原始文件
                 if os.path.exists(new_file_path):
                     os.remove(file_path)
+                    deleted_files += 1
                     print(f"Deleted duplicate file: {file_path}")
                 else:
                     # 否则，重命名文件为MD5哈希值
                     os.rename(file_path, new_file_path)
+                    renamed_files += 1
                     print(f"Renamed file: {file_path} -> {new_file_path}")
+    # 输出处理结果
+    print(f"Total files processed: {total_processed}")  
+    print(f"Files renamed: {renamed_files}")  
+    print(f"Duplicate files deleted: {deleted_files}")  
 
 # 指定要处理的目录
-directory = 'data/file'
+directory = 'data/call'
 # 调用函数来重命名文件
 rename_files_with_md5(directory)
