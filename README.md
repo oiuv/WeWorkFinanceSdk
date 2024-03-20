@@ -142,3 +142,6 @@ sdktools指令用法如下：
 ----
 
 提示：**推荐直接`./run.sh`一键处理数据**，或者把此脚本加入计划任务中每日定期执行。
+
+![readme1](readme1.png)
+![readme2](readme2.png)
