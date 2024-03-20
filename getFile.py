@@ -2,6 +2,9 @@ import pandas as pd
 import subprocess
 import time
 
+import os
+import shutil
+import datetime
 
 def get_file(msgtype, ext, file=0):
     # 读取Excel文件
@@ -10,11 +13,20 @@ def get_file(msgtype, ext, file=0):
     # 遍历每一行，读取fileid和msdid字段并调用外部指令
     for index, row in df.iterrows():
         fileid = row['sdkfileid']
-        msgid = row['msgid']
+        # 根据msgtype设置filename  
+        if msgtype == 'call':
+            filename = row['voiceid']
+        else:  
+            filename = row['md5sum']
         if file == 1:
             ext = row['fileext']
-        path = f'data/{msgtype}/{msgid}.{ext}'
-        subprocess.run(['./sdktools', '2', fileid, path])
+        path = f'data/{msgtype}/{filename}.{ext}'
+        # 检查文件是否已存在  
+        if os.path.exists(path):  
+            print(f"文件已存在: {path}")  
+        else:  
+            # 调用外部指令  
+            subprocess.run(['./sdktools', '2', fileid, path])
 
 
 # 统计代码运行时间
@@ -27,8 +39,8 @@ print('图片消息存档完成 🧡')
 get_file('voice', 'amr')
 print('语音消息存档完成 💛')
 # 视频
-# get_file('video', 'mp4')
-# print('视频消息存档完成 💚')
+get_file('video', 'mp4')
+print('视频消息存档完成 💚')
 # 文件
 get_file('file', '', file=1)
 print('文件消息存档完成 💙')
@@ -38,10 +50,6 @@ print('通话消息存档完成 💜')
 # 输出代码运行时间
 end_time = time.time()
 print(f"获取资源耗时 {end_time - start_time:.2f} 秒")
-
-import os
-import shutil
-import datetime
 
 # 获取今天的日期，格式为YYYYMMDD
 today = datetime.datetime.today().strftime('%Y%m%d')
