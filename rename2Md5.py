@@ -42,7 +42,7 @@ def rename_files_with_md5(directory):
     print(f"Files renamed: {renamed_files}")  
     print(f"Duplicate files deleted: {deleted_files}")  
 
-# 指定要处理的目录
-directory = 'data/call'
+# 指定要处理的目录，包括file、image、voice、video，不包括call
+directory = 'data/file'
 # 调用函数来重命名文件
 rename_files_with_md5(directory)
