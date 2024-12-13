@@ -5,14 +5,11 @@
 - https://zhuanlan.zhihu.com/p/597147920
 - https://developer.work.weixin.qq.com/document/path/91360
 
-本项目为基于企业微信提供的C_sdk，进行会话记录数据的获取、媒体数据的获取。
+本项目为基于企业微信提供的C_sdk，进行会话记录数据的获取、媒体数据的获取，仅针对Ubuntu系统和WSL做过部署测试，因为项目代码由chatGPT 自动生成的，显的碎片化，欢迎优化。
 
 ## openssl
 
-```
-# Windows
-choco install openssl.light
-```
+配置会话存档需要按照API文档设置消息加密公钥，可以使用以下指令生成：
 
 ```
 # 生成私钥
@@ -21,11 +18,18 @@ openssl genrsa -out private.pem 2048
 openssl rsa -in private.pem -pubout -out public.pem
 ```
 
+在Windows下，可以使用以下choco指令安装openssl：
+
+```
+# Windows
+choco install openssl.light
+```
+
 ## sdktools
 
-### 配置
+### 配置企业的corpid与secrectkey
 
-推荐直接复制`sdktools.cpp`到C_sdk中，并修改以下部分为自己的企业配置：
+修改[C_sdk](https://developer.work.weixin.qq.com/document/path/91774)中`sdktools.cpp`企业微信配置：
 
 ```c
     ret = init_fn(sdk, "wwd08c8e7c775ab44d", "zJ6k0naVVQ--gt9PUSSEvs03zW_nlDVmjLCTOTAfrew");
@@ -37,7 +41,7 @@ openssl rsa -in private.pem -pubout -out public.pem
 g++ sdktools.cpp -ldl -o sdktools
 ```
 
-`sdktools.cpp` 相对 `tool_testSdk.cpp`修改了以下部分内容从显示为保存到jsonl文件：
+提示：`sdktools.cpp` 相对 `tool_testSdk.cpp`修改了以下部分内容从显示为保存到jsonl文件：
 
 1. 修改
 ```c
@@ -72,6 +76,8 @@ g++ sdktools.cpp -ldl -o sdktools
             printf("Failed to open file\n");
         }
 ```
+
+另外修改了参数顺序，把保存文件的参数提前，避免不需要代理配置时使用的麻烦。
 
 ### 用法
 
