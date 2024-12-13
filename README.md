@@ -125,25 +125,25 @@ sdktools指令用法如下：
 
 自动从头拉取聊天记录并保存至`chat.jsonl`
 
-    python GetData.py
+    python 1_GetData.py
 
 - 2_Data2Excel
 
-把拉取的聊天记录转为excel格式
+把拉取的聊天记录`chat.jsonl`转为excel格式保存到`chat.xlsx`
 
-    python Data2Excel.py chat.jsonl
+    python 2_Data2Excel.py
 
 - 3_chatData
 
-解密聊天记录并转存为`chatdata.jsonl`
+解密聊天记录`chat.xlsx`并转存为`chatdata.jsonl`
 
-    python chatData.py chat.xlsx
+    python 3_chatData.py
 
 ### chatMsg
 
-把解密的聊天记录格式化处理为`chat_<msgtype>.xlsx`
+把解密的聊天记录`chatdata.jsonl`格式化处理为`chat_<msgtype>.xlsx`
 
-    python chatMsg.py chatdata.jsonl
+    python chatMsg.py
 
 如果开启了数据库配置还会自动分表保存数据到数据库中，目前只处理了`['text', 'image', 'voice', 'video', 'file', 'call']`类型的消息。另外代码没有为数据表配置自增ID，有需要可以自行在数据库中添加。
 

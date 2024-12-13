@@ -1,4 +1,5 @@
 import json
+import os
 import pandas as pd
 import pymysql
 from dotenv import dotenv_values
@@ -6,9 +7,14 @@ from sqlalchemy import create_engine
 
 
 def process_chat_data(file_name, encoding='utf-8'):
+    # 检查文件是否存在
+    if not os.path.isfile(file_name):
+        print(f"错误：文件 {file_name} 未找到。")
+        return  # 如果文件不存在，则直接返回
+
     # 打开 JSONL 文件，并逐行读取数据
     print(f"开始加载文件{file_name}……💕")
-    with open(file_name, 'r', encoding=encoding) as f:
+    with open(file_name, 'r', encoding='utf-8', errors='replace') as f:
         # 定义一个空列表用于存储数据
         data_list = []
         data_text = []

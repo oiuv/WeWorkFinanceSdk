@@ -51,7 +51,7 @@ class Data2Excel:
 # 使用示例
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='读取JSONL格式的原始会话记录并处理后转存为Excel文件')
-    parser.add_argument('file_name', help='JSONL格式会话记录文件，如：chat.jsonl')
+    parser.add_argument('file_name', nargs='?', default='chat.jsonl', help='JSONL格式会话记录文件，如：chat.jsonl')
     args = parser.parse_args()
     data2excel = Data2Excel(args.file_name)
     data2excel.run()

@@ -6,7 +6,7 @@ from multiprocessing import Pool
 
 # 解析命令行参数
 parser = argparse.ArgumentParser(description='读取预处理过的Excel格式会话记录并解密会话为JSONL文件')
-parser.add_argument('file_name', help='预处理过的会话记录文件，如：chat.xlsx')
+parser.add_argument('file_name', nargs='?', default='chat.xlsx', help='预处理过的会话记录文件，如：chat.xlsx')
 args = parser.parse_args()
 
 # 读取Excel文件
