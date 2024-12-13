@@ -7,8 +7,12 @@ import shutil
 import datetime
 
 def get_file(msgtype, ext, file=0):
-    # 读取Excel文件
-    df = pd.read_excel(f'chat_{msgtype}.xlsx', header=0)
+    try:
+        # 读取Excel文件
+        df = pd.read_excel(f'chat_{msgtype}.xlsx', header=0)
+    except FileNotFoundError as e:
+        print(f"文件 {f'chat_{msgtype}.xlsx'} 不存在。错误信息: {e}")
+        return  # 直接返回，不执行后续代码
 
     # 遍历每一行，读取fileid和msdid字段并调用外部指令
     for index, row in df.iterrows():

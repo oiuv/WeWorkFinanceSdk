@@ -14,4 +14,4 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo "操作成功完成"
+echo "编译完成，请复制sdktools到需要使用的目录🥰"

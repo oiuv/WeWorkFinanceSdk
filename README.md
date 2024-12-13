@@ -25,6 +25,8 @@ openssl rsa -in private.pem -pubout -out public.pem
 choco install openssl.light
 ```
 
+> 提示：请把生成的`private.pem`和`public.pem`复制到本项目根目录下。
+
 ## sdktools
 
 ### 配置企业的corpid与secrectkey
@@ -113,27 +115,29 @@ sdktools指令用法如下：
 
     python3 -m pip install pycryptodome
 
-### GetData
+### WxChat.py
+
+封装的类，提供从数据获取到解密格式化的所有功能，直接把chat.jsonl转为chatdata.jsonl。
+
+对应分步执行脚本为以下文件：
+
+- 1_GetData
 
 自动从头拉取聊天记录并保存至`chat.jsonl`
 
     python GetData.py
 
-### Data2Excel
+- 2_Data2Excel
 
 把拉取的聊天记录转为excel格式
 
     python Data2Excel.py chat.jsonl
 
-### chatData
+- 3_chatData
 
 解密聊天记录并转存为`chatdata.jsonl`
 
     python chatData.py chat.xlsx
-
-### WxChat.py
-
-封装的类，提供从数据获取到解密格式化的所有功能，直接把chat.jsonl转为chatdata.jsonl。
 
 ### chatMsg
 
@@ -142,6 +146,12 @@ sdktools指令用法如下：
     python chatMsg.py chatdata.jsonl
 
 如果开启了数据库配置还会自动分表保存数据到数据库中，目前只处理了`['text', 'image', 'voice', 'video', 'file', 'call']`类型的消息。另外代码没有为数据表配置自增ID，有需要可以自行在数据库中添加。
+
+```sql
+# 添加自增ID，一共有chat_list、chat_text、chat_image、chat_voice、chat_video、chat_file、chat_call共7张表
+ALTER TABLE chat_list
+ADD COLUMN id INT AUTO_INCREMENT PRIMARY KEY FIRST;
+```
 
 ### getFile
 
