@@ -25,7 +25,7 @@ class Data2Excel:
 
     def decrypt_random_key(self, df):
         tqdm.pandas(desc="Decrypting random key")
-        df['decrypt_random_key'] = df['encrypt_random_key'].progress_apply(decrypt_data)
+        df['encrypt_key'] = df['encrypt_random_key'].progress_apply(decrypt_data)
         return df
 
     def save_to_excel(self, df):

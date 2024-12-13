@@ -43,11 +43,12 @@ g++ sdktools.cpp -ldl -o sdktools
 
 提示：`sdktools.cpp` 相对 `tool_testSdk.cpp`修改了以下部分内容从显示为保存到jsonl文件：
 
-1. 修改
+1. 修改`sdktools 1`获取会话记录数据为保存会话数据到chat.jsonl文件：
+
 ```c
         printf("GetChatData len:%d data:%s\n", chatDatas->len, chatDatas->buf);
 ```
-为
+改为
 ```c
         // 保存到文件
         FILE* file = fopen("chat.jsonl", "a");
@@ -60,11 +61,12 @@ g++ sdktools.cpp -ldl -o sdktools
         }
 ```
 
-2. 修改
+2. 修改`sdktools 3`显示解密的消息明文为保存消息明文文本到chatdata.jsonl文件：
+
 ```c
         printf("chatdata :%s ret :%d\n", Msgs->buf, ret);
 ```
-为
+改为
 ```c
         // 保存到文件
         FILE* file = fopen("chatdata.jsonl", "a");
@@ -77,7 +79,7 @@ g++ sdktools.cpp -ldl -o sdktools
         }
 ```
 
-另外修改了参数顺序，把保存文件的参数提前，避免不需要代理配置时使用的麻烦。
+3. 修改了`sdktools 2`参数顺序，把保存文件的参数提前，避免不需要代理配置时使用的麻烦。
 
 ### 用法
 
@@ -139,9 +141,11 @@ sdktools指令用法如下：
 
     python chatMsg.py chatdata.jsonl
 
+如果开启了数据库配置还会自动分表保存数据到数据库中，目前只处理了`['text', 'image', 'voice', 'video', 'file', 'call']`类型的消息。另外代码没有为数据表配置自增ID，有需要可以自行在数据库中添加。
+
 ### getFile
 
-根据转换后的聊天记录获取图片、语音、文件等内容。
+根据转换后的聊天记录获取图片、语音、文件等内容，使用md5sum为文件名，避免文件重复下载。
 
     python getFile.py
 

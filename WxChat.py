@@ -82,7 +82,7 @@ class WxChat:
         # 解密随机密钥
         print("开始解密随机密钥……💕")
         tqdm.pandas(desc="Decrypting random key")
-        df['decrypt_random_key'] = df['encrypt_random_key'].progress_apply(decrypt_data)
+        df['encrypt_key'] = df['encrypt_random_key'].progress_apply(decrypt_data)
 
         # 将 DataFrame 写入 Excel 文件
         print("数据存档中……💕")
@@ -104,8 +104,8 @@ class WxChat:
         print(f"开始加载文件{file_name}......💕")
         df = pd.read_excel(file_name, engine='openpyxl')
 
-        # 获取decrypt_random_key和encrypt_chat_msg列的数据
-        decrypt_random_key = df['decrypt_random_key'].tolist()
+        # 获取encrypt_key和encrypt_chat_msg列的数据
+        encrypt_key = df['encrypt_key'].tolist()
         encrypt_chat_msg = df['encrypt_chat_msg'].tolist()
 
         # 构造指令
@@ -113,8 +113,8 @@ class WxChat:
 
         # 解密聊天记录
         print("开始解密聊天记录......💕")
-        for i in tqdm(range(len(decrypt_random_key)), desc='Processing'):
-            subprocess.run(cmd + [decrypt_random_key[i], encrypt_chat_msg[i]],
+        for i in tqdm(range(len(encrypt_key)), desc='Processing'):
+            subprocess.run(cmd + [encrypt_key[i], encrypt_chat_msg[i]],
                            stdout=subprocess.PIPE)
 
         # 打印结果
